@@ -1,1 +1,1 @@
-forward(3)  #向前移动3m
+forward(-2) #倒退2m

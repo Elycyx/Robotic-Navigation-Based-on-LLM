@@ -23,7 +23,7 @@ RECORD_TIMEOUT = 3
 ENERGY_THRESHOLD = 2000
 DYNAMIC_ENERGY_THRESHOLD = False
 MODEL = 'small'
-openai.api_key = "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"
+openai.api_key = ""
 history1 = ''
 history2 = ''
 

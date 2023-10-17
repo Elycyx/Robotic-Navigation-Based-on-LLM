@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info
+.pytest_cache
+.ipynb_checkpoints
+
+thumbs.db
+.DS_Store
+.idea
+test.py
+*.mp3
+api_key.txt
+*.png
+*.wav
+pyproject.toml
+code.txt

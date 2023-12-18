@@ -3,7 +3,7 @@ import rclpy
 import math
 import os
 import json
-from odom_reader import get_current_position
+from tf_reader import get_current_position
 from trajectory_length_calculator import start_trajectory_length_calculator, stop_trajectory_length_calculator
 import time
 import csv
@@ -68,8 +68,25 @@ def generate_codes(result):
     code = 'ros2 action send_goal /FollowWaypoints nav2_msgs/action/FollowWaypoints "{poses: [' + way_points[0] + ', ' + ', '.join(way_points[1:]) + ']}"'
     return code
 
+def result_recorder(results, navigation_info, s, i, total_length, total_error, total_time, total_MTR):
+    '''存储导航信息, results: 存储导航信息的列表，navigation_info: 导航信息，s: 导航是否成功，i: 任务编号，total_length: 总距离，total_error: 总误差，total_time: 总时间，total_MTR: 总移动用时比'''
+    results.append([i, navigation_info['total_distance'], navigation_info['navigation_error'], s, navigation_info['time'], navigation_info['nav_time'] / navigation_info['time']]) # 存储导航信息
+    total_length += navigation_info['total_distance']
+    total_error += navigation_info['navigation_error']
+    total_time += navigation_info['time']
+    total_MTR += navigation_info['nav_time'] / navigation_info['time']
+    return
+
+def output2csv(results, headers, result_path):
+    '''将导航信息输出到csv文件'''
+    with open(result_path, 'w', newline='') as file:
+    # 保存结果，输出到csv文件
+        writer = csv.writer(file)
+        writer.writerow(headers)
+        writer.writerows(results)
+
 def run_nav2(code):
-    '''执行导航代码'''
+    '''执行导航代码，等待机器人完成导航'''
     process_output = os.popen(code) # 执行导航代码
     command_output = process_output.read() # 读取导航代码执行结果
     print(command_output) 
@@ -85,34 +102,35 @@ def navigate(task_description, target_position):
         result = llm_query(task_description) # 执行LLM查询
         code = generate_codes(result) # 生成导航代码
         start_trajectory_length_calculator() # 开始计算轨迹长度
+        nav_start_time = time.time() # 记录导航开始时间
         run_nav2(code) # 执行导航代码
         end_time = time.time() # 记录结束时间
-        total_distance = stop_trajectory_length_calculator() # 停止计算轨迹长度crw-rw----  1 root   dialout 188,   3 12月 17 16:38 ttyUSB3
+        total_distance = stop_trajectory_length_calculator() # 停止计算轨迹长度
 
     except Exception as e:
         print(f'error:{e}')
         end_time = time.time()
 
-    time_spent = end_time - start_time # 计算导航时间
-    current_position = get_current_position() # 获取当前位置
-    x_final = current_position['x']
-    y_final = current_position['y']
+    time_spent = end_time - start_time # 计算总时间
+    nav_time = end_time - nav_start_time # 计算导航时间
+    x_final, y_final = get_current_position() # 获取当前位置
     final_position = [x_final, y_final] # 记录最终位置
-    print(f'final_position: {final_position}')
+    # print(f'final_position: {final_position}')
 
     nav_error = calculate_navigation_error(final_position, target_position) # 计算导航误差
 
     return {
         'total_distance': total_distance,
         'navigation_error': nav_error,
-        'time': time_spent
+        'time': time_spent,
+        'nav_time': nav_time
     }
 
 
 
 # 定义初始化参数
 
-client = OpenAI(api_key='') # openai api key
+client = OpenAI(api_key='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') # openai api key
 global success
 success = 0 # 全局成功次数
 prompt_path = 'prompt1.txt' # prompt文件路径
@@ -122,7 +140,8 @@ results = []
 total_length = 0 # 总距离
 total_error = 0 # 总误差
 total_time = 0 # 总时间
-headers = ['number of the task', 'PL', 'NE', 'SR','time']
+total_MTR = 0 # 总移动用时比
+headers = ['number of the task', 'PL', 'NE', 'SR','time', 'MTR'] # csv文件表头
 
 
 tasks_info, pr = data_reader(tasks_path, prompt_path) # 读取任务和prompt文件
@@ -130,24 +149,17 @@ for i, task in enumerate(tasks_info["tasks"], start=1):
     # 遍历所有任务，执行导航任务并返回相关信息
     navigation_info = navigate(task["description"], task["goal"])
     if navigation_info['navigation_error'] < 3:
+        # 如果导航误差小于3，认为导航成功
         s = 1
     else:
         s = 0
     success += s
-    print(navigation_info)
-    results.append([i, navigation_info['total_distance'], navigation_info['navigation_error'], s, navigation_info['time']])
-    total_length += navigation_info['total_distance']
-    total_error += navigation_info['navigation_error']
-    total_time += navigation_info['time']
-    time.sleep(5)
+    print(navigation_info) # 打印导航信息
+    result_recorder(results, navigation_info, s, i, total_length, total_error, total_time, total_MTR) # 存储导航信息
+    time.sleep(5) # 等待5s
 
-print(f'success_rate: {success / tasks_info["num"]}')
-results.append(['overall', total_length, total_error / tasks_info["num"], success / tasks_info["num"], total_time / tasks_info["num"]]) # 计算并存储总体结果
-with open(result_path, 'w', newline='') as file:
-    # 保存结果，输出到csv文件
-    writer = csv.writer(file)
-    writer.writerow(headers)
-    writer.writerows(results)
+results.append(['overall', total_length, total_error / tasks_info["num"], success / tasks_info["num"], total_time / tasks_info["num"], total_MTR / tasks_info["num"]]) # 计算并存储总体结果
+output2csv(results, headers, result_path) # 将导航信息输出到csv文件
 
   
 

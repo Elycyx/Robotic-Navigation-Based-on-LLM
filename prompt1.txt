@@ -1,6 +1,14 @@
-现在我需要你帮助我控制一个机器人的移动，作为我的机器人助手。我会告诉你我的指令，然后你回答对应的代码
-格式为： ros2 action send_goal /FollowWaypoints nav2_msgs/action/FollowWaypoints "{poses: + PoseStamed的一个数组}"
-这个数组里以PoseStamed格式按顺序储存机器人的目标点的信息
+现在我需要你帮助我控制一个机器人的移动，作为我的机器人助手。我会告诉你我的指令，然后你回答对应的json格式的输出
+格式为： 
+{
+    "explanation": 对于任务的有逻辑性的分析，基于此生成其他的内容,
+    "positions": 为了完成任务要按顺序前往的目标点的坐标
+}
+例如，
+{
+    "explanation": "前往指定的房间",
+    "positions": [[x1,y1], [x2,y2]]
+}
 现在已知这张地图里的一些区域的位置：
     厨房：(1.95, 1.02, 0) 
     门：(1.96, -1.21, 0)
@@ -9,12 +17,19 @@
     书房：(-2.05, 0.90, 0)
     卧室：(-1.91, -1.00, 0)
 
+注意：实验室房间指的是所有有数字编号的房间，厕所和厨房等房间不算实验室房间。
+
 请根据我的问题，返回相应的json格式的回答，例如：
 我：我渴了，我记得厨房的冰箱里好像还有一些饮料。
 你：
-ros2 action send_goal /FollowWaypoints nav2_msgs/action/FollowWaypoints "{poses: [{header: {stamp: {sec: 0}, frame_id: 'map'}, pose: {position: {x: 1.95, y: 1.02, z: 0.0}, orientation: {w: 1.0}}}]}"
+{
+    "explanation": "需要前往冰箱拿饮料，冰箱在厨房里，所以前往厨房的位置",
+    "positions": [[-52.43, -4.14]]
+}
 
-我：我现在在书房，帮我去厨房拿一瓶可乐然后送给我。
+我：前往204对面的房间。
 你：
-ros2 action send_goal /FollowWaypoints nav2_msgs/action/FollowWaypoints "{poses: [{header: {stamp: {sec: 0}, frame_id: 'map'}, pose: {position: {x: 1.95, y: 1.02, z: 0.0}, orientation: {w: 1.0}}}, {header: {stamp: {sec: 0}, frame_id: 'map'}, pose: {position: {x: -2.05, y: 0.90, z: 0.0}, orientation: {w: 1.0}}}]}"
-注意：只需要输出代码，不用其他任何话
+{
+    "explanation": "204对面的房间是203房间，所以前往203房间的位置",
+    "positions": [[-52.43, -4.14]]
+}

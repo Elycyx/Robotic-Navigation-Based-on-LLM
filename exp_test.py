@@ -68,15 +68,6 @@ def generate_codes(result):
     code = 'ros2 action send_goal /FollowWaypoints nav2_msgs/action/FollowWaypoints "{poses: [' + way_points[0] + ', ' + ', '.join(way_points[1:]) + ']}"'
     return code
 
-def result_recorder(results, navigation_info, s, i, total_length, total_error, total_time, total_MTR):
-    '''存储导航信息, results: 存储导航信息的列表，navigation_info: 导航信息，s: 导航是否成功，i: 任务编号，total_length: 总距离，total_error: 总误差，total_time: 总时间，total_MTR: 总移动用时比'''
-    results.append([i, navigation_info['total_distance'], navigation_info['navigation_error'], s, navigation_info['time'], navigation_info['nav_time'] / navigation_info['time']]) # 存储导航信息
-    total_length += navigation_info['total_distance']
-    total_error += navigation_info['navigation_error']
-    total_time += navigation_info['time']
-    total_MTR += navigation_info['nav_time'] / navigation_info['time']
-    return
-
 def output2csv(results, headers, result_path):
     '''将导航信息输出到csv文件'''
     with open(result_path, 'w', newline='') as file:
@@ -155,7 +146,11 @@ for i, task in enumerate(tasks_info["tasks"], start=1):
         s = 0
     success += s
     print(navigation_info) # 打印导航信息
-    result_recorder(results, navigation_info, s, i, total_length, total_error, total_time, total_MTR) # 存储导航信息
+    results.append([i, navigation_info['total_distance'], navigation_info['navigation_error'], s, navigation_info['time'], navigation_info['nav_time'] / navigation_info['time']]) # 存储导航信息
+    total_length += navigation_info['total_distance']
+    total_error += navigation_info['navigation_error']
+    total_time += navigation_info['time']
+    total_MTR += navigation_info['nav_time'] / navigation_info['time']
     time.sleep(5) # 等待5s
 
 results.append(['overall', total_length, total_error / tasks_info["num"], success / tasks_info["num"], total_time / tasks_info["num"], total_MTR / tasks_info["num"]]) # 计算并存储总体结果

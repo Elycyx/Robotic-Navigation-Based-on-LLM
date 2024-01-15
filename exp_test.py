@@ -49,12 +49,13 @@ def data_reader(tasks_path, prompt_path):
 def llm_query(task_description):
     '''执行LLM查询并返回相关信息'''
     response = client.chat.completions.create(
-            model="gpt-4-1106-preview",
+            # model="gpt-4-1106-preview",
+            model='gpt-3.5-turbo',
             messages=[
                 {"role": "system", "content": pr},
                 {"role": "user", "content": str(task_description)},
             ],
-            response_format={"type": "json_object"}
+            # response_format={"type": "json_object"}
         )
     result = json.loads(response.choices[0].message.content)
     print(result)
@@ -63,9 +64,13 @@ def llm_query(task_description):
 def generate_codes(result):
     '''生成导航代码'''
     way_points = []
-    for i, position in enumerate(result['positions'], start=1):
-        way_points.append("{header: {stamp: {sec: 0}, frame_id: 'map'}, pose: {position: {x: " + str(position[0]) + ", y: " + str(position[1]) + ", z: 0.0}, orientation: {w: 1.0}}}")
-    code = 'ros2 action send_goal /FollowWaypoints nav2_msgs/action/FollowWaypoints "{poses: [' + way_points[0] + ', ' + ', '.join(way_points[1:]) + ']}"'
+    try:
+        for i, position in enumerate(result['positions'], start=1):
+            way_points.append("{header: {stamp: {sec: 0}, frame_id: 'map'}, pose: {position: {x: " + str(position[0]) + ", y: " + str(position[1]) + ", z: 0.0}, orientation: {w: 1.0}}}")
+        code = 'ros2 action send_goal /FollowWaypoints nav2_msgs/action/FollowWaypoints "{poses: [' + way_points[0] + ', ' + ', '.join(way_points[1:]) + ']}"'
+    except Exception as e:
+        print(f'error:{e}')
+        code = ''
     return code
 
 def output2csv(results, headers, result_path):
@@ -124,8 +129,8 @@ def navigate(task_description, target_position):
 client = OpenAI(api_key='') # openai api key
 global success
 success = 0 # 全局成功次数
-prompt_path = 'prompt1.txt' # prompt文件路径
-tasks_path = 'test.json' # 任务文件路径·
+prompt_path = 'prompt.txt' # prompt文件路径
+tasks_path = 'tasks.json' # 任务文件路径·
 result_path = next_available_filename('result', '.csv', 'results')
 results = []
 total_length = 0 # 总距离

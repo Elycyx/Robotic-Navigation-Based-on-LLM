@@ -34,7 +34,7 @@ class TransformNode(Node):
             rclpy.spin_once(self, timeout_sec=0.5)
 
 def get_current_position(args=None):
-    rclpy.init(args=args)
+    # rclpy.init(args=args)
     transform_node = TransformNode()
     transform_node.run()
     x = transform_node.x
@@ -42,6 +42,6 @@ def get_current_position(args=None):
 
     # Correctly handle the destruction of the node and shutdown of rclpy
     transform_node.destroy_node()
-    rclpy.shutdown()
+    # rclpy.shutdown()
     return (x, y)
 

@@ -52,7 +52,7 @@ spin_thread = None
 
 def start_trajectory_length_calculator():
     global calculator_node, spin_thread
-    rclpy.init()
+    # rclpy.init()
     calculator_node = TrajectoryLengthCalculator()
 
     def spin_node():

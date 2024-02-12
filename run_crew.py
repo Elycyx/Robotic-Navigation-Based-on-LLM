@@ -205,7 +205,7 @@ def navigate(task_description, target_position, i):
 
 # 定义初始化参数
 
-# client = OpenAI(api_key='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') # openai api key
+# client = OpenAI(api_key='') # openai api key
 global success, feedback_list
 feedback_list = []
 success = 0 # 全局成功次数

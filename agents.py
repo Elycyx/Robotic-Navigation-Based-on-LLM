@@ -3,7 +3,7 @@ from crewai import Agent
 from langchain.chat_models import ChatOpenAI
 from Tools import ReadTools
 
-OPENAI_API_KEY = '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'
+OPENAI_API_KEY = ''
 
 gpt3 = ChatOpenAI(model='gpt-3.5-turbo', openai_api_key=OPENAI_API_KEY) # Loading GPT-3.5
 gpt4 = ChatOpenAI(model='gpt-4-turbo-preview', openai_api_key=OPENAI_API_KEY) # Loading GPT-4

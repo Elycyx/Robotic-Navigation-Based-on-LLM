@@ -164,7 +164,7 @@ def navigate(task_description, target_position):
 
 # 定义初始化参数
 
-client = OpenAI(api_key='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') # openai api key
+client = OpenAI(api_key='') # openai api key
 global success
 success = 0 # 全局成功次数
 prompt_path = 'prompt_en.txt' # prompt文件路径

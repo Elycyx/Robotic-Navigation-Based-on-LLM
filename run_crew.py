@@ -1,4 +1,4 @@
-from openai import OpenAI
+# from openai import OpenAI
 import rclpy
 import math
 import os
@@ -9,6 +9,9 @@ import time
 import csv
 from geometry_msgs.msg import PoseStamped
 from builtin_interfaces.msg import Time
+from crewai import Crew
+from tasks import Tasks
+from agents import Agents
 import subprocess
 import shlex
 
@@ -51,8 +54,8 @@ def data_reader(tasks_path, prompt_path):
 def llm_query(task_description):
     '''执行LLM查询并返回相关信息'''
     response = client.chat.completions.create(
-            model="gpt-4-turbo-preview",
-            # model='gpt-3.5-turbo',
+            # model="gpt-4-1106-preview",
+            model='gpt-3.5-turbo',
             # model = 'ft:gpt-3.5-turbo-1106:melx::8k5nE521',
             messages=[
                 {"role": "system", "content": pr},
@@ -62,6 +65,32 @@ def llm_query(task_description):
         )
     result = json.loads(response.choices[0].message.content)
     print(result)
+    return result
+
+def crewai_process(task_description, i):
+    '''执行crewai并返回相关信息'''  
+    tasks = Tasks()
+    agents = Agents()
+    task = task_description
+    # Create Agents
+    external_agent = agents.prompt_engineer_agent()
+    internal_agent = agents.motion_controller_agent()
+    # Create Tasks
+    prompt_task = tasks.prompt_task(external_agent, task, i)
+    control_task = tasks.control_task(internal_agent, task)
+    # Create Crew responsible for Copy
+    crew = Crew(
+        agents=[
+            external_agent,
+            internal_agent
+        ],
+        tasks=[
+            prompt_task,
+            control_task
+        ],
+        verbose=True
+    )
+    result = crew.kickoff()
     return result
 
 def generate_codes(position):
@@ -106,7 +135,7 @@ def run_nav2(code):
         print(f"An error occurred: {e}")
         return  # 退出函数
 
-def navigate(task_description, target_position):
+def navigate(task_description, target_position, i):
     '''执行导航任务并返回相关信息'''
     print(task_description)
     rclpy.init() # 初始化ros2
@@ -116,12 +145,17 @@ def navigate(task_description, target_position):
     time_spent = 0 
     start_time = time.time() # 记录开始时间
     try:
-        result = llm_query(task_description) # 执行LLM查询
+        start_trajectory_length_calculator() # 开始计算轨迹长度
+        # result = llm_query(task_description) # 执行LLM查询
+        result = crewai_process(task_description, i) # 执行crewai查询
+        result = result.replace('Task output: ', '')
+        result = json.loads(result)
+        print(result)
         num = len(result['positions']) # 获取导航点个数
         if num != len(target_position):
-            rclpy.shutdown() # 关闭ros2
+            stop_trajectory_length_calculator()
+            feedback_list.append({'result': result, 'success': 0, 'error_cause': 'The number of goal points is incorrect.'})
             return {'success': 0,'total_distance': 0,'navigation_error': 0,'time': 0,'nav_time': 0}
-        start_trajectory_length_calculator() # 开始计算轨迹长度
         nav_start_time = time.time() # 记录导航开始时间
         for i in range(num):
             code = generate_codes(result['positions'][i]) # 生成导航代码
@@ -147,11 +181,18 @@ def navigate(task_description, target_position):
         print(f'error:{e}')
         end_time = time.time()
         total_distance = stop_trajectory_length_calculator() # 停止计算轨迹长度
+        feedback_list.append({'result': result, 'success': 0, 'error_cause': 'Unknown.'})
+        return {'success': 0,'total_distance': 0,'navigation_error': 0,'time': 0,'nav_time': 0}
 
     time_spent = end_time - start_time # 计算总时间
     nav_time = end_time - nav_start_time # 计算导航时间   
-    # print(f'final_position: {final_position}')
+    # print(f'final_position: {current_position}')
     # rclpy.shutdown() # 关闭ros2
+    if success == 1:
+        feedback_list.append({'result': result, 'success': success, 'error_cause': 'This task was successful.'})
+    else:
+        feedback_list.append({'result': result, 'success': success, 'error_cause': 'Some goal point locations are incorrect.'})
+    # print(feedback_list)
     return {
         'success': success,
         'total_distance': total_distance,
@@ -164,8 +205,9 @@ def navigate(task_description, target_position):
 
 # 定义初始化参数
 
-client = OpenAI(api_key='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') # openai api key
-global success
+# client = OpenAI(api_key='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') # openai api key
+global success, feedback_list
+feedback_list = []
 success = 0 # 全局成功次数
 prompt_path = 'prompt_en.txt' # prompt文件路径
 tasks_path = 'tasks.json' # 任务文件路径·
@@ -181,7 +223,7 @@ headers = ['number of the task', 'PL', 'NE', 'SR','time', 'MTR'] # csv文件表�
 tasks_info, pr = data_reader(tasks_path, prompt_path) # 读取任务和prompt文件
 for i, task in enumerate(tasks_info["tasks"], start=1):
     # 遍历所有任务，执行导航任务并返回相关信息
-    navigation_info = navigate(task["description"], task["goal"])
+    navigation_info = navigate(task["description"], task["goal"], i)
     success += navigation_info['success']
     print(navigation_info) # 打印导航信息
     if navigation_info['time'] != 0:
@@ -196,8 +238,10 @@ for i, task in enumerate(tasks_info["tasks"], start=1):
         total_MTR += navigation_info['nav_time'] / navigation_info['time']
     time.sleep(5) # 等待5s
 
+with open('feedback/fb.json', 'w') as file:
+    json.dump(feedback_list, file)
 
-results.append(['overall', total_length, total_error / success, success / tasks_info["num"], total_time / success, total_MTR / success]) # 计算并存储总体结果
+results.append(['overall', total_length / success, total_error / success, success / tasks_info["num"], total_time / success, total_MTR / success]) # 计算并存储总体结果
 output2csv(results, headers, result_path) # 将导航信息输出到csv文件
 
   

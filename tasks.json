@@ -2,44 +2,44 @@
     "num": 10,
     "tasks": [
         {
-            "description": "前往204对面的房间。",
+            "description": "Go to the room opposite to 204.",
             "goal": [[-7.84, -4.80]]
         },
         {
-            "description": "我刚刚用烤箱烤了一些东西，帮我去看看做好了没。",
+            "description": "I just baked something in the oven. Can you go and check if it's done?",
             "goal": [[-50.63, -2.67]]
         },
         {
-            "description": "帮我拿一个扳手到210来。",
+            "description": "Get and bring a wrench to room 210 for me, please.",
             "goal": [[-33.30, -4.78], [-30.26, -3.45]]
         },
         {
-            "description": "紧急情况，需要立即将急救包从休息区送到离厨房最近的厕所。",
+            "description": "Emergency situation. Please immediately take the first aid kit from the rest area to the nearest toilet to the kitchen.",
             "goal": [[-21.16, 0.65], [-44.31, -0.70]]
         },
         {
-            "description": "202发生火灾了，从202最近的厕所找到水然后到202去灭火。",
+            "description": "There is a fire in room 202. Find water from the nearest toiletm to room 202 and use it to extinguish the fire.",
             "goal": [[8.64, 3.30], [0.68, -3.25]]
         },
         {
-            "description": "外卖员把外卖送到这层楼了，请去签收一下并且在考虑距离的前提下送到205和202。",
+            "description": "The delivery person has brought the food to this floor. Please go and sign for it, and then, considering the distance, deliver it to rooms 205 and 202 as fast as possible.",
             "goal": [[5.48, 2.91], [0.68, -3.25], [-15.69, -4.52]]
         },
         {
-            "description": "先前往休息区，然后在附近最近的房间拿一个包裹送到楼下。",
+            "description": "First, go to the rest area, then pick up a document from the nearest room and deliver it downstairs.",
             "goal": [[-21.16, 0.65], [-21.00, -4.71], [5.48, 2.91]]
         },
         {
-            "description": "我之前在沙发上休息时遗失了一份文件，请帮我拿到它后复印一份带到205来。",
+            "description": "I lost a document while resting on the sofa earlier. Please help me retrieve it and make a copy of it, then bring it to room 205.",
             "goal": [[-21.16, 0.65], [-7.84, -4.80], [-15.69, -4.52]]
         },
         {
-            "description": "从201开始依次经过所有奇数号的房间，然后去给自己充电。",
+            "description": "Start from room 201 and proceed through all rooms with odd numbers, then go charge yourself.",
             "goal": [[-2.32, -4.77], [-7.84, -4.80], [-15.69, -4.52], [-21.00, -4.71], [-33.30, -4.78], [-21.16, 0.65]]
         },
         {
-            "description": "机器人需要测试在高峰时段在走廊导航的能力，请从厨房出发，依次经过所有实验室房间，最后到达200房间。",
-            "goal": [[-50.63, -2.67], [-33.83, -3.17], [-33.30, -4.78], [-30.26, -3.45], [-21.00, -4.71], [-13.32, -2.92], [-15.69, -4.52], [-6.39, -3.00], [-7.84, -4.80], [0.68, -3.25], [-2.32, -4.77], [6.89, -4.18]]
+            "description": "The robot needs to test its ability to navigate in the hallway during peak hours. Start from the room 212 and proceed through all rooms in order, then finally reach room 200.",
+            "goal": [[-33.83, -3.17], [-33.30, -4.78], [-30.26, -3.45], [-21.00, -4.71], [-13.32, -2.92], [-15.69, -4.52], [-6.39, -3.00], [-7.84, -4.80], [0.68, -3.25], [-2.32, -4.77], [6.89, -4.18]]
         }
     ]
 }

@@ -1,0 +1,44 @@
+Now I need your help to control the movement of a robot as my robot assistant. I will provide you with instructions, and you will respond with the corresponding JSON-formatted output. The format is as follows:
+{
+    "explanation": "Logical analysis step by step for the task, based on which other content is generated.",
+    "positions": "Coordinates of the target points to be visited in order, stored as a list."
+}
+For example:
+{
+    "explanation": "Go to the specified room.",
+    "positions": [[x1,y1], [x2,y2]]
+}
+Now, based on the known positions of some areas on this map (indicated by triple quotes):
+'''
+Staircase: (5.48, 2.91) The essential location for accessing this floor
+200: (6.89, -4.18)
+201: (-2.32, -4.77) This is my workspace.
+202: (0.68, -3.25) This is the drone lab.
+203: (-7.84, -4.80) There is a printer here.
+204: (-6.39, -3.00) This is where my senior colleague is.
+205: (-15.69, -4.52) This is the soft robot lab.
+206: (-13.32, -2.92)
+207: (-21.00, -4.71)
+Rest area: (-21.16, 0.65) You can recharge here.
+210: (-30.26, -3.45)
+211: (-33.30, -4.78) There is a large tool area here.
+212: (-33.83, -3.17)
+Kitchen: (-50.63, -2.67)
+Toilets (two of them): (-44.31, -0.70) and (8.64, 3.30)
+'''
+You can try to imagine the spatial structure of this corridor and the relative positions of these locations based on their coordinates. When calculating distances, you can use the Euclidean distance between two points. Please note that the lab rooms refer to all rooms with numeric identifiers, while toilets and the kitchen are not considered lab rooms.
+Please provide the corresponding JSON-formatted answer strictly following the given format, with only the coordinates of the target points in the positions field. Here are some examples:
+    User: "I'm thirsty. I remember there are some drinks in the refrigerator in the kitchen."
+    Assistant:
+    {
+        "explanation": "Need to go to the refrigerator to get drinks. The refrigerator is located in the kitchen, so go to the kitchen.",
+        "positions": [[-50.63, -2.67]]
+    }
+
+    User: "I'm giving you a document. Please make a copy and deliver it to room 201."
+    Assistant:
+    {
+        "explanation": "Need to make a copy of the document and deliver it to room 201. There is a printer in room 203, so go there first to make the copy, and then go to room 201.",
+        "positions": [[-7.84, -4.80], [-2.32, -4.77]]
+    }
+

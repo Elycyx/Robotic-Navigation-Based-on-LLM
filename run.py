@@ -9,6 +9,7 @@ import time
 import csv
 from geometry_msgs.msg import PoseStamped
 from builtin_interfaces.msg import Time
+from pos_pub import Nav2Client
 import subprocess
 import shlex
 
@@ -51,8 +52,8 @@ def data_reader(tasks_path, prompt_path):
 def llm_query(task_description):
     '''执行LLM查询并返回相关信息'''
     response = client.chat.completions.create(
-            model="gpt-4-turbo-preview",
-            # model='gpt-3.5-turbo',
+            # model="gpt-4-turbo-preview",
+            model='gpt-3.5-turbo',
             # model = 'ft:gpt-3.5-turbo-1106:melx::8k5nE521',
             messages=[
                 {"role": "system", "content": pr},
@@ -109,25 +110,27 @@ def run_nav2(code):
 def navigate(task_description, target_position):
     '''执行导航任务并返回相关信息'''
     print(task_description)
-    rclpy.init() # 初始化ros2
+    # rclpy.init() # 初始化ros2
     success = 1
     total_distance = 0 
     nav_error = 0
     time_spent = 0 
     start_time = time.time() # 记录开始时间
+    nav_start_time = start_time
     try:
         result = llm_query(task_description) # 执行LLM查询
         num = len(result['positions']) # 获取导航点个数
         if num != len(target_position):
-            rclpy.shutdown() # 关闭ros2
+            # rclpy.shutdown() # 关闭ros2
             return {'success': 0,'total_distance': 0,'navigation_error': 0,'time': 0,'nav_time': 0}
-        start_trajectory_length_calculator() # 开始计算轨迹长度
+        # start_trajectory_length_calculator() # 开始计算轨迹长度
         nav_start_time = time.time() # 记录导航开始时间
         for i in range(num):
-            code = generate_codes(result['positions'][i]) # 生成导航代码
+            # code = generate_codes(result['positions'][i]) # 生成导航代码
             target = target_position[i] # 获取目标位置
             # print(f'target: {target}')
-            run_nav2(code) # 执行导航代码
+            # run_nav2(code) # 执行导航代码
+            nav2client.nav2(result['positions'][i])
             x_final, y_final = get_current_position() # 获取当前位置
             current_position = [x_final, y_final] # 记录当前位置
             # print(f'current_position: {current_position}')
@@ -140,13 +143,13 @@ def navigate(task_description, target_position):
             time.sleep(1) # 等待1s
         end_time = time.time() # 记录结束时间
         # print(f'end_time: {end_time}')
-        total_distance = stop_trajectory_length_calculator() # 停止计算轨迹长度
+        # total_distance = stop_trajectory_length_calculator() # 停止计算轨迹长度
         # print(f'total_distance: {total_distance}')
         nav_error /= num # 计算平均导航误差
     except Exception as e:
         print(f'error:{e}')
         end_time = time.time()
-        total_distance = stop_trajectory_length_calculator() # 停止计算轨迹长度
+        # total_distance = stop_trajectory_length_calculator() # 停止计算轨迹长度
 
     time_spent = end_time - start_time # 计算总时间
     nav_time = end_time - nav_start_time # 计算导航时间   
@@ -154,7 +157,7 @@ def navigate(task_description, target_position):
     # rclpy.shutdown() # 关闭ros2
     return {
         'success': success,
-        'total_distance': total_distance,
+        # 'total_distance': total_distance,
         'navigation_error': nav_error,
         'time': time_spent,
         'nav_time': nav_time
@@ -164,8 +167,10 @@ def navigate(task_description, target_position):
 
 # 定义初始化参数
 
+rclpy.init() # 初始化ros2
 client = OpenAI(api_key='') # openai api key
-global success
+global success, nav2client
+nav2client = Nav2Client()
 success = 0 # 全局成功次数
 prompt_path = 'prompt_en.txt' # prompt文件路径
 tasks_path = 'tasks.json' # 任务文件路径·
@@ -175,7 +180,7 @@ total_length = 0 # 总距离
 total_error = 0 # 总误差
 total_time = 0 # 总时间
 total_MTR = 0 # 总移动用时比
-headers = ['number of the task', 'PL', 'NE', 'SR','time', 'MTR'] # csv文件表头
+headers = ['number of the task', 'NE', 'SR','time', 'MTR'] # csv文件表头
 
 
 tasks_info, pr = data_reader(tasks_path, prompt_path) # 读取任务和prompt文件
@@ -185,19 +190,20 @@ for i, task in enumerate(tasks_info["tasks"], start=1):
     success += navigation_info['success']
     print(navigation_info) # 打印导航信息
     if navigation_info['time'] != 0:
-        results.append([i, navigation_info['total_distance'], navigation_info['navigation_error'], navigation_info['success'], navigation_info['time'], navigation_info['nav_time'] / navigation_info['time']]) # 存储导航信息
+        results.append([i, navigation_info['navigation_error'], navigation_info['success'], navigation_info['time'], navigation_info['nav_time'] / navigation_info['time']]) # 存储导航信息
     else:
-        results.append([i, navigation_info['total_distance'], navigation_info['navigation_error'], navigation_info['success'], navigation_info['time'], 0])
+        results.append([i, navigation_info['navigation_error'], navigation_info['success'], navigation_info['time'], 0])
     if navigation_info['success'] == 1:
         # 如果导航成功，计算总体结果
-        total_length += navigation_info['total_distance']
+        # total_length += navigation_info['total_distance']
         total_error += navigation_info['navigation_error']
         total_time += navigation_info['time']
         total_MTR += navigation_info['nav_time'] / navigation_info['time']
     time.sleep(5) # 等待5s
+nav2client.destroy_node()
+rclpy.shutdown() # 关闭ros2
 
-
-results.append(['overall', total_length, total_error / success, success / tasks_info["num"], total_time / success, total_MTR / success]) # 计算并存储总体结果
+results.append(['overall', total_error / success, success / tasks_info["num"], total_time / success, total_MTR / success]) # 计算并存储总体结果
 output2csv(results, headers, result_path) # 将导航信息输出到csv文件
 
   

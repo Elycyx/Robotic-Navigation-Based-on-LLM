@@ -1,0 +1,434 @@
+{
+    "num": 30,
+    "tasks": [
+        {
+            "description": "Please recharge the robot at the front desk.",
+            "goal": [
+                [
+                    1.92,
+                    7.66
+                ]
+            ]
+        },
+        {
+            "description": "Deliver a box of surgical gloves from Utility Room 2 to the 2nd Surgery Room.",
+            "goal": [
+                [
+                    8.43,
+                    14.8
+                ],
+                [1.59, -17.3]
+            ]
+        },
+        {
+            "description": "Bring a patient's meal from the food vending machine to Bed 1.",
+            "goal": [
+                [
+                    7.35,
+                    10.2
+                ],
+                [
+                    -8.83,
+                    0.924
+                ]
+            ]
+        },
+        {
+            "description": "Fetch a new set of bed sheets from Utility Room 1 for Bed 5.",
+            "goal": [
+                [
+                    -8.08,
+                    14.2
+                ],
+                [
+                    -9.56,
+                    -15.6
+                ]
+            ]
+        },
+        {
+            "description": "Collect a wheelchair from the front desk for Bed 3.",
+            "goal": [
+                [
+                    1.92,
+                    7.66
+                ],
+                [
+                    -8.32,
+                    -6.22]
+            ]
+        },
+        {
+            "description": "Take a specimen from Bed 6 to the lab near the 1st Staircase.",
+            "goal": [
+                [
+                    -3.77,
+                    17.3
+                ],
+                [
+                    -9.35,
+                    -19.5
+                ]
+            ]
+        },
+        {
+            "description": "Deliver a set of documents from the Director's Office to the front desk.",
+            "goal": [
+                [
+                    1.16,
+                    -4.2
+                ],
+                [
+                    1.92,
+                    7.66]
+            ]
+        },
+        {
+            "description": "Deliver a special diet menu from the front desk to Bed 16.",
+            "goal": [
+                [
+                    1.92,
+                    7.66
+                ],
+                [
+                    8.26,
+                    -1.1
+                ]
+            ]
+        },
+        {
+            "description": "Collect a lab report from the lab near the 2nd Staircase for the 2nd Surgery Room.",
+            "goal": [
+                [
+                    3.97,
+                    17.5
+                ],
+                [
+                    1.59,
+                    -17.3
+                ]
+            ]
+        },
+        {
+            "description": "Take a donation from the front desk to the Director's Office.",
+            "goal": [
+                [
+                    1.92,
+                    7.66
+                ],
+                [
+                    1.16,
+                    -4.2
+                ]
+            ]
+        },
+        {
+            "description": "Fetch a package of syringes from Utility Room 1 for the 4th Examination Room.",
+            "goal": [
+                [
+                    -8.08,
+                    14.2
+                ],
+                [
+                    9.77,
+                    10.9
+                ]
+            ]
+        },
+        {
+            "description": "Deliver a new thermometer from Utility Room 2 to the 1st Examination Room.",
+            "goal": [
+                [
+                    8.43,
+                    14.8
+                ],
+                [
+                    -9.6,
+                    10.7
+                ]
+            ]
+        },
+        {
+            "description": "Deliver an EKG machine from Utility Room 2 to Bed 1.",
+            "goal": [
+                [
+                    8.43,
+                    14.8
+                ],
+                [
+                    -8.83,
+                    0.924
+                ]
+            ]
+        },
+        {
+            "description": "Take a blood pressure monitor from Utility Room 1 to Bed 3.",
+            "goal": [
+                [
+                    -8.08,
+                    14.2
+                ],
+                [
+                    -8.32,
+                    -6.22
+                ]
+            ]
+        },
+        {
+            "description": "Fetch a meal tray from the food vending machine to Bed 4.",
+            "goal": [
+                [
+                    7.35,
+                    10.2
+                ],
+                [
+                    -9.23,
+                    -12.4
+                ]
+            ]
+        },
+        {
+            "description": "Collect a stack of clean towels from Utility Room 1 for Bed 6.",
+            "goal": [
+                [
+                    -8.08,
+                    14.2
+                ],
+                [
+                    -9.35,
+                    -19.5
+                ]
+            ]
+        },
+        {
+            "description": "Deliver a package of diapers from Utility Room 2 to Bed 7.",
+            "goal": [
+                [
+                    8.43,
+                    14.8
+                ],
+                [
+                    0.429,
+                    -27.2
+                ]
+            ]
+        },
+        {
+            "description": "Take a bottle of disinfectant from Utility Room 1 to the men's restroom.",
+            "goal": [
+                [
+                    -8.08,
+                    14.2
+                ],
+                [
+                    -1.66,
+                    -11
+                ]
+            ]
+        },
+        {
+            "description": "Fetch a box of face masks from Utility Room 2 for the women's restroom.",
+            "goal": [
+                [
+                    8.43,
+                    14.8
+                ],
+                [
+                    1.52,
+                    -11
+                ]
+            ]
+        },
+        {
+            "description": "Fetch a new IV bag from Utility Room 2, deliver it to Bed 4, and then dispose of waste at the men's restroom.",
+            "goal": [
+                [
+                    8.43,
+                    14.8
+                ],
+                [
+                    -9.23,
+                    -12.4
+                ],
+                [
+                    -1.66,
+                    -11
+                ]
+            ]
+        },
+        {
+            "description": "Deliver a meal from the food vending machine to Bed 5, pick up laundry from there, and drop it off at Utility Room 1.",
+            "goal": [
+                [
+                    7.35,
+                    10.2
+                ],
+                [
+                    -9.56,
+                    -15.6
+                ],
+                [
+                    -8.08,
+                    14.2
+                ]
+            ]
+        },
+        {
+            "description": "Get a thermometer from Utility Room 1, take it to Bed 6, then assist in delivering documents to the 2nd Examination Room.",
+            "goal": [
+                [
+                    -8.08,
+                    14.2
+                ],
+                [
+                    -9.35,
+                    -19.5
+                ],
+                [
+                    -9.68,
+                    6.02
+                ]
+            ]
+        },
+        {
+            "description": "Collect a prescription from the front desk, deliver it to Bed 7, and then restock the beverage vending machine.",
+            "goal": [
+                [
+                    1.92,
+                    7.66
+                ],
+                [
+                    0.429,
+                    -27.2
+                ],
+                [
+                    -7.03,
+                    10.2
+                ]
+            ]
+        },
+        {
+            "description": "Take a set of X-rays from the 2nd Surgery Room to Bed 8, then bring back used equipment to Utility Room 2.",
+            "goal": [
+                [
+                    1.59,
+                    -17.3
+                ],
+                [
+                    4.37,
+                    -27.2
+                ],
+                [
+                    8.43,
+                    14.8
+                ]
+            ]
+        },
+        {
+            "description": "Fetch cleaning supplies from Utility Room 1, clean the 1st Examination Room, and then deliver a specimen to the lab near the 1st Staircase.",
+            "goal": [
+                [
+                    -8.08,
+                    14.2
+                ],
+                [
+                    -9.6,
+                    10.7
+                ],
+                [
+                    -3.77,
+                    17.3
+                ]
+            ]
+        },
+        {
+            "description": "Deliver a pair of crutches from Utility Room 2 to Bed 9, then assist a patient from there to the 3rd Examination Room.",
+            "goal": [
+                [
+                    8.43,
+                    14.8
+                ],
+                [
+                    7.54,
+                    -27.5
+                ],
+                [
+                    10,
+                    5.7
+                ]
+            ]
+        },
+        {
+            "description": "Collect a prescription from the front desk, take it to Bed 7, and then bring a sample from there to the lab near the 2nd Staircase.",
+            "goal": [
+                [
+                    1.92,
+                    7.66
+                ],
+                [
+                    0.429,
+                    -27.2
+                ],
+                [
+                    3.97,
+                    17.5
+                ]
+            ]
+        },
+        {
+            "description": "Fetch cleaning supplies from Utility Room 1, clean the 2nd Examination Room, and then dispose of hazardous materials at the designated area near the 1st Staircase.",
+            "goal": [
+                [
+                    -8.08,
+                    14.2
+                ],
+                [
+                    -9.68,
+                    6.02
+                ],
+                [
+                    -3.77,
+                    17.3
+                ]
+            ]
+        },
+        {
+            "description": "Deliver a set of patient files from the front desk to the Deputy Director's Office, then take a broken infusion pump from there to Utility Room 2 for repairs.",
+            "goal": [
+                [
+                    1.92,
+                    7.66
+                ],
+                [
+                    -1.13,
+                    -3.71
+                ],
+                [
+                    8.43,
+                    14.8
+                ]
+            ]
+        },
+        {
+            "description": "Take a urine sample from Bed 8 to the lab near the 1st Staircase, then deliver a fresh meal from the food vending machine to Bed 9.",
+            "goal": [
+                [
+                    4.37,
+                    -27.2
+                ],
+                [
+                    -3.77,
+                    17.3
+                ],
+                [
+                    7.35,
+                    10.2
+                ],
+                [
+                    7.54,
+                    -27.5
+                ]
+            ]
+        }
+    ]
+}

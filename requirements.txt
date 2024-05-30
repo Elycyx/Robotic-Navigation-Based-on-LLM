@@ -2,4 +2,4 @@ openai
 numpy
 torch
 matplotlib
-
+langchain_community

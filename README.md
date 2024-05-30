@@ -1,6 +1,6 @@
 
 
-# Trajectron++: Dynamically-Feasible Trajectory Forecasting With Heterogeneous Data
+# Method
 This repository contains the code for []() by Yuxuan Chen\*, Yixin Han\*, and Li Xiao (\* denotes equal contribution).
 
 ## Installation

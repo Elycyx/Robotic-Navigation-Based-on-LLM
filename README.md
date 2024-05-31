@@ -1,7 +1,7 @@
 
 
 # Method
-This repository contains the code for []() by Yuxuan Chen\*, Yixin Han\*, and Li Xiao (\* denotes equal contribution).
+This repository contains the code for []() by Yuxuan Chen\*, Yixin Han\*, and Xiao Li (\* denotes equal contribution).
 
 ## Installation
 

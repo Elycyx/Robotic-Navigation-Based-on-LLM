@@ -128,11 +128,6 @@ Then, we can modify relevant parameters in the program, such as the learning rat
 ```
 python finetuning.py
 ```
-### Simulation in Gazebo
-The accuracy evaluation performed in the function only involves theoretical calculations and does not include navigation or related content. In actual situations, due to navigation and formatting issues, the obtained accuracy is relatively low. We can use the fine-tuned model to simulate in Gazebo (the process is the same as Running FastChat).
-```
-python simulation_single.py --model <model_name>
-```
 
 ## Citation
 

@@ -94,7 +94,42 @@ python simulation_single.py --model <model_name>
 This runs a single model like GPT-4 to finish the navigation tasks.
 
 ## Fine-tuning
-
+Our first step is to install Hugging Face Libraries and Pytorch, including trl, transformers and datasets. 
+```
+# Install Pytorch & other libraries
+!pip install "torch==2.1.2" tensorboard
+ 
+# Install Hugging Face libraries
+!pip install  --upgrade \
+  "transformers==4.36.2" \
+  "datasets==2.16.1" \
+  "accelerate==0.26.1" \
+  "evaluate==0.4.1" \
+  "bitsandbytes==0.42.0" \
+  # "trl==0.7.10" # \
+  # "peft==0.7.1" \
+ 
+# install peft & trl from github
+!pip install git+https://github.com/huggingface/trl@a3c5b7178ac4f65569975efadc97db2f3749c65e --upgrade
+!pip install git+https://github.com/huggingface/peft@4a1559582281fc3c9283892caea8ccef1d6f5a4f --upgrade
+```
+After having an Huggingface account, we will use the login util from the huggingface_hub package to log into our account and store our token (access key) on the disk.
+```
+from huggingface_hub import login
+ 
+login(
+  token="", # ADD YOUR TOKEN HERE
+  add_to_git_credential=True
+)
+```
+Then, we can modify relevant parameters in the program, such as the learning rate range and the number of epochs, according to the actual situation, and then run the fine-tuning program.
+```
+python finetuning.py
+```
+The accuracy evaluation performed in the function only involves theoretical calculations and does not include navigation or related content. In actual situations, due to navigation and formatting issues, the obtained accuracy is relatively low. We can use the fine-tuned model to simulate in Gazebo (the process is the same as Running FastChat).
+```
+python simulation_single.py --model <model_name>
+```
 
 ## Citation
 

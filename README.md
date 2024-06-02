@@ -94,6 +94,7 @@ python simulation_single.py --model <model_name>
 This runs a single model like GPT-4 to finish the navigation tasks.
 
 ## Fine-tuning
+### Environment Setup
 Our first step is to install Hugging Face Libraries and Pytorch, including trl, transformers and datasets. 
 ```
 # Install Pytorch & other libraries
@@ -122,10 +123,12 @@ login(
   add_to_git_credential=True
 )
 ```
+### Program running
 Then, we can modify relevant parameters in the program, such as the learning rate range and the number of epochs, according to the actual situation, and then run the fine-tuning program.
 ```
 python finetuning.py
 ```
+### Simulation in Gazebo
 The accuracy evaluation performed in the function only involves theoretical calculations and does not include navigation or related content. In actual situations, due to navigation and formatting issues, the obtained accuracy is relatively low. We can use the fine-tuned model to simulate in Gazebo (the process is the same as Running FastChat).
 ```
 python simulation_single.py --model <model_name>

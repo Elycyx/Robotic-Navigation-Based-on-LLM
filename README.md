@@ -1,11 +1,11 @@
 
 
-# Method
-This repository contains the code for []() by Yuxuan Chen\*, Yixin Han\*, and Xiao Li (\* denotes equal contribution).
+# FastNav: Fine-tuned Adaptive Small-language-models Trained for Multi-point Robot Navigation
+This repository contains the code for [FastNav: Fine-tuned Adaptive Small-language-models Trained for Multi-point Robot Navigation]() by Yuxuan Chen\*, Yixin Han\*, and Xiao Li (\* denotes equal contribution).
 
 ## Installation
 
-### Cloning Method
+### Cloning FastNav
 
 ```
 git clone https://github.com/Elycyx/Robotic-Navigation-Based-on-LLM.git
@@ -14,7 +14,7 @@ git clone https://github.com/Elycyx/Robotic-Navigation-Based-on-LLM.git
 Follow the [tutorial](https://docs.ros.org/en/rolling/index.html) to install Ros2
 
 ### Nav2 Installation
-Our robot navigation controller is based on [Nav2](https://docs.nav2.org/getting_started/index.html). Before using method, we need to install Nav2.
+Our robot navigation controller is based on [Nav2](https://docs.nav2.org/getting_started/index.html). Before using FastNav, we need to install Nav2.
 ```
 sudo apt install ros-<ros2-distro>-navigation2
 sudo apt install ros-<ros2-distro>-nav2-bringup
@@ -37,8 +37,8 @@ gpt4 = ChatOpenAI(model='gpt-4-turbo', base_url='https://api.openai-proxy.com/v1
 #### Conda Environment
 We'll create a conda environment to hold the dependencies.
 ```
-conda create -n method python=3.10
-conda activate method
+conda create -n FastNav python=3.10
+conda activate FastNav
 pip install -r requirements.txt
 ```
 
@@ -76,13 +76,13 @@ openai.api_key = "EMPTY"
 openai.base_url = "http://localhost:8000/v1/"
 ```
 
-### Running Method
-#### Method with Teacher-student Iteration
+### Running FastNav
+#### FastNav with Teacher-student Iteration
 ```
 python simulation.py --model <model_name>
 ```
 The <model_name> here is different from that when running FastChat. For example, in FastChat, it is `google/gemma-2b`, while here, it is `gemma-2b`, just the model name without usenames.
-#### Method with Memory
+#### FastNav with Memory
 ```
 python simulation_slm.py --model <model_name>
 ```
@@ -94,40 +94,7 @@ python simulation_single.py --model <model_name>
 This runs a single model like GPT-4 to finish the navigation tasks.
 
 ## Fine-tuning
-### Environment Setup
-Our first step is to install Hugging Face Libraries and Pytorch, including trl, transformers and datasets. 
-```
-# Install Pytorch & other libraries
-!pip install "torch==2.1.2" tensorboard
- 
-# Install Hugging Face libraries
-!pip install  --upgrade \
-  "transformers==4.36.2" \
-  "datasets==2.16.1" \
-  "accelerate==0.26.1" \
-  "evaluate==0.4.1" \
-  "bitsandbytes==0.42.0" \
-  # "trl==0.7.10" # \
-  # "peft==0.7.1" \
- 
-# install peft & trl from github
-!pip install git+https://github.com/huggingface/trl@a3c5b7178ac4f65569975efadc97db2f3749c65e --upgrade
-!pip install git+https://github.com/huggingface/peft@4a1559582281fc3c9283892caea8ccef1d6f5a4f --upgrade
-```
-After having an Huggingface account, we will use the login util from the huggingface_hub package to log into our account and store our token (access key) on the disk.
-```
-from huggingface_hub import login
- 
-login(
-  token="", # ADD YOUR TOKEN HERE
-  add_to_git_credential=True
-)
-```
-### Program running
-Then, we can modify relevant parameters in the program, such as the learning rate range and the number of epochs, according to the actual situation, and then run the fine-tuning program.
-```
-python finetuning.py
-```
+
 
 ## Citation
 
